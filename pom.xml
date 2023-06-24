@@ -1,15 +1,40 @@
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.mezzdev</groupId>
     <artifactId>suffixtree</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>Generalized Suffix Tree</name>
+    <description>A Java implementation of a Generalized Suffix Tree using Ukkonen's algorithm</description>
     <url>https://github.com/mezz/generalized-suffix-tree</url>
-    <dependencies>
 
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Alessandro Bahgat</name>
+            <email>me@abahgat.com</email>
+        </developer>
+
+        <developer>
+            <name>James Mitchell</name>
+            <email>james@mezzdev.net</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/mezz/generalized-suffix-tree.git</connection>
+        <developerConnection>scm:git:ssh://github.com:mezz/generalized-suffix-tree.git</developerConnection>
+        <url>http://github.com/mezz/generalized-suffix-tree/tree/master</url>
+    </scm>
+
+    <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -26,8 +51,15 @@
             <artifactId>fastutil</artifactId>
             <version>8.5.12</version>
         </dependency>
-
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
@@ -49,6 +81,34 @@
                     <argLine>-Xms1024m -Xmx1024m</argLine>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadoc</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-source</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -57,14 +117,41 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
-              </plugin>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
 </project>
