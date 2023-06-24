@@ -15,5 +15,12 @@
  */
 package net.mezzdev.suffixtree;
 
+/**
+ * A helper class to store a pair of data, to return as a result from functions.
+ * @param first the first part of the result data
+ * @param second the second part of the result data
+ * @param <A> the type of the first data
+ * @param <B> the type of the second data
+ */
 public record Pair<A, B>(A first, B second) {
 }

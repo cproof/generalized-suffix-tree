@@ -21,6 +21,9 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Helper interface that indicates that all fields and methods should be considered {@link Nonnull} by default.
+ */
 @Nonnull
 @TypeQualifierDefault({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

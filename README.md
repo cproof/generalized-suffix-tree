@@ -1,5 +1,5 @@
 # Generalized Suffix Tree
-[![Build Status](https://travis-ci.org/abahgat/suffixtree.png?branch=master)](https://travis-ci.org/abahgat/suffixtree)
+[![Build Status](https://github.com/mezz/generalized-suffix-tree/actions/workflows/verify.yml/badge.svg)](https://github.com/mezz/generalized-suffix-tree/actions/workflows/verify.yml)
 
 A Generalized Suffix Tree, based on Ukkonen's paper "On-line construction of suffix trees"
 http://www.cs.helsinki.fi/u/ukkonen/SuffixT1withFigs.pdf

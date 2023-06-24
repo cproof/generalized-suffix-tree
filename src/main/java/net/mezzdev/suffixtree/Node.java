@@ -68,6 +68,8 @@ class Node<T> {
 	/**
 	 * Gets data from the payload of both this node and its children, the string representation
 	 * of the path to this node is a substring of the one of the children nodes.
+	 *
+	 * @param resultsConsumer  a consumer that accepts the resulting data
 	 */
 	public void getData(Consumer<Collection<T>> resultsConsumer) {
 		resultsConsumer.accept(Collections.unmodifiableCollection(this.data));
@@ -104,7 +106,7 @@ class Node<T> {
 	 * Tests whether a node contains a reference to the given index.
 	 *
 	 * @param value the value to look for
-	 * @return true <tt>this</tt> contains a reference to index
+	 * @return true if this contains the value
 	 */
 	protected boolean contains(T value) {
 		return data.contains(value);
@@ -146,6 +148,10 @@ class Node<T> {
 		this.suffix = suffix;
 	}
 
+	/**
+	 * Add a new value to this {@code Node}'s data.
+	 * @param value the value to add
+	 */
 	protected void addValue(T value) {
 		switch (data.size()) {
 			case 0 -> data = List.of(value);
@@ -173,6 +179,9 @@ class Node<T> {
 		return "Node: size:" + data.size() + " Edges: " + edges;
 	}
 
+	/**
+	 * @return debug statistics for this node's size and the size of all its descendants.
+	 */
 	public IntSummaryStatistics nodeSizeStats() {
 		return nodeSizes().summaryStatistics();
 	}
@@ -184,6 +193,9 @@ class Node<T> {
 		);
 	}
 
+	/**
+	 * @return debug statistics for this node's edges and the edges of all its descendants.
+	 */
 	public String nodeEdgeStats() {
 		IntSummaryStatistics edgeCounts = nodeEdgeCounts().summaryStatistics();
 		IntSummaryStatistics edgeLengths = nodeEdgeLengths().summaryStatistics();
@@ -205,6 +217,13 @@ class Node<T> {
 		);
 	}
 
+	/**
+	 * Debug function for printing this {@code Node} in a format usable by <a href="https://graphviz.org/">graphviz</a>.
+	 *
+	 * @param out  the print writer to output to.
+	 * @param includeSuffixLinks  whether to include suffix links in the output graph.
+	 * @see GeneralizedSuffixTree#printTree
+	 */
 	public void printTree(PrintWriter out, boolean includeSuffixLinks) {
 		out.println("digraph {");
 		out.println("\trankdir = LR;");

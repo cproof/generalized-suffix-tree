@@ -65,7 +65,7 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 	/**
 	 * Searches for the given word within the GST.
 	 * <p>
-	 * Gets all the results for which the key contains the <tt>word</tt> that was
+	 * Gets all the results for which the key contains the {@code word} that was
 	 * supplied as input.
 	 *
 	 * @param word            the key to search for
@@ -108,7 +108,7 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 	}
 
 	/**
-	 * Adds the specified <tt>index</tt> to the GST under the given <tt>key</tt>.
+	 * Adds the specified {@code value} to the GST under the given {@code key}.
 	 *
 	 * @param key   the string key that will be added to the index
 	 * @param value the value that will be added
@@ -349,7 +349,11 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 
 	/**
 	 * Print the tree for use by <a href="https://graphviz.org/">graphviz</a>.
-	 * To view, run the command: `dot -Tpng -O <filename>.dot`
+	 * To view, run the command:
+	 * {@code dot -Tpng -O <filename>.dot}
+	 *
+	 * @param out  the print writer to output to.
+	 * @param includeSuffixLinks  whether to include suffix links in the output graph.
 	 */
 	@SuppressWarnings("unused") // used for debugging
 	public void printTree(PrintWriter out, boolean includeSuffixLinks) {
