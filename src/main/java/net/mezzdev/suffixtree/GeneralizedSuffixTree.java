@@ -340,6 +340,14 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 		return canonize(s, k);
 	}
 
+	public RootNode<T> getRoot() {
+		return root;
+	}
+
+	public Node<T> getActiveLeaf() {
+		return activeLeaf;
+	}
+
 	@Override
 	public String statistics() {
 		return "GeneralizedSuffixTree:" +

@@ -280,6 +280,14 @@ class Node<T> {
 		}
 	}
 
+	public Collection<T> getData() {
+		return data;
+	}
+
+	public Char2ObjectMap<Edge<T>> getEdges() {
+		return edges;
+	}
+
 	private static <T> String nodeId(Node<T> node) {
 		return "node" + Integer.toHexString(node.hashCode()).toUpperCase();
 	}
