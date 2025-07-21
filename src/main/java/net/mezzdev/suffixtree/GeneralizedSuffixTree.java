@@ -16,7 +16,7 @@
 package net.mezzdev.suffixtree;
 
 import java.io.PrintWriter;
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -366,5 +366,58 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 	@SuppressWarnings("unused") // used for debugging
 	public void printTree(PrintWriter out, boolean includeSuffixLinks) {
 		root.printTree(out, includeSuffixLinks);
+	}
+
+	/**
+	 * Find every distinct substring of length {@code minLength} that occurs in at least
+	 * {@code minKeys} different keys and return, for each substring, the list of keys
+	 * in which it is present.
+	 *
+	 * @param minLength length of the substrings that must be reported (&gt; 0)
+	 * @param minKeys   minimal number of distinct keys in which the substring must occur (&gt; 0)
+	 * @return a list whose items are pairs {@code <substring , list-of-keys>}.
+	 * The list of keys is de-duplicated and the method does **not**
+	 * guarantee any particular ordering of the returned list.
+	 * @throws IllegalArgumentException if any argument is not strictly positive
+	 */
+	public List<Pair<CharSequence, List<T>>> findAllCommonSubstringsOfSizeInMinKeys(int minLength, int minKeys) {
+		List<Pair<CharSequence, List<T>>> results = new ArrayList<>();
+
+		// DFS traversal through the tree
+		class Helper {
+			void dfs(Node<T> node, StringBuilder path) {
+				// At this node, collect all unique keys under this subtree
+				Set<T> keys = new HashSet<>();
+				collectKeys(node, keys);
+
+				if (keys.size() >= minKeys && path.length() >= minLength) {
+					// Extract all substrings of path of length ≥ minLength
+					for (int i = 0; i <= path.length() - minLength; i++) {
+						for (int j = i + minLength; j <= path.length(); j++) {
+							CharSequence substr = path.subSequence(i, j);
+							results.add(new Pair<>(substr, new ArrayList<>(keys)));
+						}
+					}
+				}
+
+				// Recurse into children
+				for (Edge<T> edge : node.getEdges().values()) {
+					int lenBefore = path.length();
+					path.append(edge.label());
+					dfs(edge.dest(), path);
+					path.setLength(lenBefore); // backtrack
+				}
+			}
+
+			void collectKeys(Node<T> node, Set<T> keys) {
+				keys.addAll(node.getData());
+				for (Edge<T> edge : node.getEdges().values()) {
+					collectKeys(edge.dest(), keys);
+				}
+			}
+		}
+
+		new Helper().dfs(root, new StringBuilder());
+		return results;
 	}
 }
