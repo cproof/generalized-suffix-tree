@@ -17,6 +17,7 @@ package net.mezzdev.suffixtree;
 
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -380,27 +381,24 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 	 * guarantee any particular ordering of the returned list.
 	 * @throws IllegalArgumentException if any argument is not strictly positive
 	 */
-	public List<Pair<CharSequence, List<T>>> findAllCommonSubstringsOfSizeInMinKeys(int minLength, int minKeys) {
-		List<Pair<CharSequence, List<T>>> results = new ArrayList<>();
+	public void findAllCommonSubstringsOfSizeInMinKeys(
+			int minLength,
+			int minKeys,
+			BiConsumer<CharSequence, Collection<T>> visitor // Process each found substring immediately
+	) {
+		Set<String> seen = new HashSet<>();
 
-		// DFS traversal through the tree
 		class Helper {
 			void dfs(Node<T> node, StringBuilder path) {
-				// At this node, collect all unique keys under this subtree
-				Set<T> keys = new HashSet<>();
-				collectKeys(node, keys);
+				Set<T> keys = collectKeys(node);
 
 				if (keys.size() >= minKeys && path.length() >= minLength) {
-					// Extract all substrings of path of length ≥ minLength
-					for (int i = 0; i <= path.length() - minLength; i++) {
-						for (int j = i + minLength; j <= path.length(); j++) {
-							CharSequence substr = path.subSequence(i, j);
-							results.add(new Pair<>(substr, new ArrayList<>(keys)));
-						}
+					String str = path.toString();
+					if (seen.add(str)) { // Only output once
+						visitor.accept(str, keys);
 					}
 				}
 
-				// Recurse into children
 				for (Edge<T> edge : node.getEdges().values()) {
 					int lenBefore = path.length();
 					path.append(edge.label());
@@ -408,16 +406,12 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 					path.setLength(lenBefore); // backtrack
 				}
 			}
-
-			void collectKeys(Node<T> node, Set<T> keys) {
-				keys.addAll(node.getData());
-				for (Edge<T> edge : node.getEdges().values()) {
-					collectKeys(edge.dest(), keys);
-				}
+			Set<T> collectKeys(Node<T> node) {
+				Set<T> acc = new HashSet<>(node.getData());
+				for (Edge<T> edge : node.getEdges().values()) acc.addAll(collectKeys(edge.dest()));
+				return acc;
 			}
 		}
-
 		new Helper().dfs(root, new StringBuilder());
-		return results;
 	}
 }

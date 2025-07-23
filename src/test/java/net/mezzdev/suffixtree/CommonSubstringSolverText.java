@@ -2,6 +2,8 @@ package net.mezzdev.suffixtree;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +21,9 @@ public class CommonSubstringSolverText {
             tree.put(testStrings.get(i), i);
         }
 
-        List<Pair<CharSequence, List<Integer>>> allCommonSubstringsOfSizeInMinKeys = tree.findAllCommonSubstringsOfSizeInMinKeys(4, 2);
-        assertEquals(6, allCommonSubstringsOfSizeInMinKeys.size());
+        List<Pair<CharSequence, Collection<Integer>>> allCommonSubstringsOfSizeInMinKeys = new ArrayList<>();
+        tree.findAllCommonSubstringsOfSizeInMinKeys(4, 2, (substring, indexes) ->
+                allCommonSubstringsOfSizeInMinKeys.add(new Pair<>(substring, indexes)));
+        assertEquals(4, allCommonSubstringsOfSizeInMinKeys.size());
     }
 }
