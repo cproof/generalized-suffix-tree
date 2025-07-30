@@ -384,6 +384,7 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 	public void findAllCommonSubstringsOfSizeInMinKeys(
 			int minLength,
 			int minKeys,
+			boolean shallow,
 			BiConsumer<CharSequence, Collection<T>> visitor // Process each found substring immediately
 	) {
 		Set<String> seen = new HashSet<>();
@@ -397,6 +398,7 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 					if (seen.add(str)) { // Only output once
 						visitor.accept(str, keys);
 					}
+					if (shallow) return;
 				}
 
 				for (Edge<T> edge : node.getEdges().values()) {
