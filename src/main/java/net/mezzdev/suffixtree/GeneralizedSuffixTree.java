@@ -385,9 +385,11 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 			int minLength,
 			int minKeys,
 			boolean shallow,
+			boolean filterParts,
 			BiConsumer<CharSequence, Collection<T>> visitor // Process each found substring immediately
 	) {
 		Set<String> seen = new HashSet<>();
+		GeneralizedSuffixTree<Boolean> seenTree = new GeneralizedSuffixTree<>();
 
 		class Helper {
 			void dfs(Node<T> node, StringBuilder path) {
@@ -395,7 +397,8 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 
 				if (keys.size() >= minKeys && path.length() >= minLength) {
 					String str = path.toString();
-					if (seen.add(str)) { // Only output once
+					if (seen.add(str) && (!filterParts || seenTree.getSearchResults(str).isEmpty())) { // Only output once
+						seenTree.put(str, true);
 						visitor.accept(str, keys);
 					}
 					if (shallow) return;

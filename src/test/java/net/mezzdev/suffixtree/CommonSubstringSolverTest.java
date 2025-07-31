@@ -22,9 +22,9 @@ public class CommonSubstringSolverTest {
         }
 
         List<Pair<CharSequence, Collection<Integer>>> allCommonSubstringsOfSizeInMinKeys = new ArrayList<>();
-        tree.findAllCommonSubstringsOfSizeInMinKeys(4, 2, false, (substring, indexes) ->
+        tree.findAllCommonSubstringsOfSizeInMinKeys(4, 2, false, true, (substring, indexes) ->
                 allCommonSubstringsOfSizeInMinKeys.add(new Pair<>(substring, indexes)));
-        assertEquals(4, allCommonSubstringsOfSizeInMinKeys.size());
+        assertEquals(3, allCommonSubstringsOfSizeInMinKeys.size());
     }
 
     @Test
@@ -43,13 +43,13 @@ public class CommonSubstringSolverTest {
         GeneralizedSuffixTree<Integer> lookupTree = new GeneralizedSuffixTree<>();
 
         List<Pair<CharSequence, Collection<Integer>>> allCommonSubstringsOfSizeInMinKeys = new ArrayList<>();
-        tree.findAllCommonSubstringsOfSizeInMinKeys(4, 2, true, (substring, indexes) -> {
+        tree.findAllCommonSubstringsOfSizeInMinKeys(4, 2, true, true, (substring, indexes) -> {
             if (true || lookupTree.getSearchResults(substring.toString()).isEmpty()) {
                 allCommonSubstringsOfSizeInMinKeys.add(new Pair<>(substring, indexes));
                 lookupTree.put(substring.toString(), -1);
             }
                 });
         allCommonSubstringsOfSizeInMinKeys.stream().map(Pair::first).forEach(System.out::println);
-        assertEquals(4, allCommonSubstringsOfSizeInMinKeys.size());
+        assertEquals(3, allCommonSubstringsOfSizeInMinKeys.size());
     }
 }
