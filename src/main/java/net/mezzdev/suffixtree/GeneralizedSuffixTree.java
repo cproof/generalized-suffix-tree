@@ -419,4 +419,43 @@ public class GeneralizedSuffixTree<T> implements ISuffixTree<T> {
 		}
 		new Helper().dfs(root, new StringBuilder());
 	}
+
+	/**
+	 * Filters the input list of pairs by removing elements that are substrings of
+	 * another element in the list. The filtering is performed in two iterations:
+	 * forward and reverse. In the first iteration, substrings are pruned in their
+	 * original order, and in the second iteration, the list is reversed so that
+	 * substrings can also be detected and removed in reverse order.
+	 *
+	 * @param list a list of pairs, where each pair contains a {@code CharSequence}
+	 *             representing a string and a {@code Collection} of associated elements.
+	 *             The list is modified in place.
+	 */
+	public static <T> void filterSubstrings(List<Pair<CharSequence, Collection<T>>> list) {
+		//Filter
+		GeneralizedSuffixTree<Boolean> lookupTree = new GeneralizedSuffixTree<>();
+		Iterator<Pair<CharSequence, Collection<T>>> iterator = list.iterator();
+		while (iterator.hasNext()) {
+			Pair<CharSequence, Collection<T>> pair = iterator.next();
+			if (lookupTree.getSearchResults(pair.first().toString()).isEmpty()) {
+				lookupTree.put(pair.first().toString(), true);
+			} else {
+				iterator.remove();
+			}
+		}
+
+		//Filter, other direction
+		Collections.reverse(list);
+		lookupTree = new GeneralizedSuffixTree<>();
+		iterator = list.iterator();
+		while (iterator.hasNext()) {
+			Pair<CharSequence, Collection<T>> pair = iterator.next();
+			if (lookupTree.getSearchResults(pair.first().toString()).isEmpty()) {
+				lookupTree.put(pair.first().toString(), true);
+			} else {
+				iterator.remove();
+			}
+		}
+		Collections.reverse(list);
+	}
 }
